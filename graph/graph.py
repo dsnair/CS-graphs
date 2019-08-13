@@ -27,30 +27,42 @@ class Graph:
     # 1. From starting_vertex, visit the adjacent unvisited vertex. 
     # Mark it as visited. Display it. Insert it in a queue.
     # 2. Once all adjacent vertices are visited, remove the first vertex from the queue.
-    # 3. Repeat Rule 1 and Rule 2 until the queue is empty.
+    # 3. Repeat #1 and #2 until the queue is empty.
     def bft(self, starting_vertex):
         q = Queue()
         visited = [starting_vertex]
         q.enqueue(starting_vertex)
 
-        while q.size() > 0:
+        while q.size():
             for vertex in self.vertices[q.queue[0]]:
-                if vertex in visited:
-                    q.dequeue()
-                else:
+                if vertex not in visited:
                     visited.append(vertex)
                     q.enqueue(vertex)
+            q.dequeue()                    
 
         return visited
 
 
-
-
-
-
-    # Print each vertex in depth-first order beginning from starting_vertex
+    # Depth-First Traversal:
+    # 1. From starting_vertex, visit the adjacent unvisited vertex. 
+    # Mark it as visited. Display it. Push it in a stack.
+    # 2. Once all adjacent vertices are visited, pop up a vertex from the stack. 
+    # (It will pop up all the vertices from the stack, which do not have adjacent vertices.)
+    # 3. Repeat #1 and #2 until the stack is empty.
     def dft(self, starting_vertex):
-        pass
+        s = Stack()
+        visited = []
+        s.push(starting_vertex)
+
+        while s.size():  
+            vertex = s.pop() 
+            if vertex not in visited:
+                visited.append(vertex)
+                for next_vertex in self.vertices[vertex]:
+                    s.push(next_vertex)
+
+        return visited
+
 
     # Print each vertex in depth-first order beginning from starting_vertex.
     # This should be done using recursion
@@ -92,7 +104,6 @@ if __name__ == '__main__':
 
     # Should print:
     #     {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
-    
     print(graph.vertices)
 
     
@@ -109,8 +120,7 @@ if __name__ == '__main__':
     #     1, 2, 4, 3, 6, 5, 7
     #     1, 2, 4, 3, 7, 6, 5
     #     1, 2, 4, 3, 7, 5, 6
-    
-    print(graph.bft(1))
+    print("BFT", graph.bft(1))
 
 
     # Valid DFT paths:
@@ -118,8 +128,7 @@ if __name__ == '__main__':
     #     1, 2, 3, 5, 4, 7, 6
     #     1, 2, 4, 7, 6, 3, 5
     #     1, 2, 4, 6, 3, 5, 7
-    
-    graph.dft(1)
+    print("DFT", graph.dft(1))
 
     
     # Valid DFT recursive paths:

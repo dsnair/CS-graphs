@@ -41,9 +41,9 @@ graph.add_edge('0', '4')  # No '4' vertex, should raise an Exception!
 Write a function within your Graph class that takes a starting vertex as an argument, then performs BFT. Your function should print the resulting vertices in the order they were visited. (Note that there are many valid paths. Return any one of them.)
 
 
-## Part 3: Implement Depth-First Traversal with a Stack
+## Part 3: Implement Depth-First Traversal
 
-Write a function within your Graph class that takes takes a starting vertex as an argument, then performs DFT. Your function should print the resulting vertices in the order they were visited. Note that there are multiple valid paths that may be printed.
+Write a function within your Graph class that takes takes a starting vertex as an argument, then performs DFT. Your function should print the resulting vertices in the order they were visited. (Note that there are many valid paths. Return any one of them.)
 
 
 ## Part 3.5: Implement Depth-First Traversal using Recursion
