@@ -81,7 +81,7 @@ class Graph:
 
         while q.size():
             path = q.dequeue()
-            print("Path", path)
+            # print("Path", path)
             vertex = path[-1]
 
             if vertex not in visited:
@@ -97,12 +97,31 @@ class Graph:
         
         return None
 
-        return visited
 
-    # Return a list containing a path from starting_vertex to destination_vertex 
-    # in depth-first order
+    # Depth-First Search: Return a list containing the shortest path 
+    # from starting_vertex to destination_vertex in depth-first order
     def dfs(self, starting_vertex, destination_vertex):
-        pass
+        s = Stack()
+        visited = []
+        s.push([starting_vertex])
+
+        while s.size():
+            path = s.pop()
+            # print("Path", path)
+            vertex = path[-1]
+
+            if vertex not in visited:
+                if vertex == destination_vertex:
+                    return path
+                
+                visited.append(vertex)
+
+                for next_vertex in self.vertices[vertex]:
+                    new_path = list(path)
+                    new_path.append(next_vertex) 
+                    s.push(new_path)
+        
+        return None
 
 
 if __name__ == '__main__':
@@ -161,18 +180,15 @@ if __name__ == '__main__':
     #     1, 2, 3, 5, 4, 7, 6
     #     1, 2, 4, 7, 6, 3, 5
     #     1, 2, 4, 6, 3, 5, 7
-    
     graph.dft_recursive(1)
 
     
     # Valid BFS path:
     #     [1, 2, 4, 6]
-    
     print("BFS", graph.bfs(1, 6))
 
     
     # Valid DFS paths:
     #     [1, 2, 4, 6]
     #     [1, 2, 4, 7, 6]
-    
-    print(graph.dfs(1, 6))
+    print("DFS", graph.dfs(1, 6))
