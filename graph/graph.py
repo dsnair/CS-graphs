@@ -64,10 +64,17 @@ class Graph:
         return visited
 
 
+    # Depth-First Traversal: 
     # Print each vertex in depth-first order beginning from starting_vertex.
-    # This should be done using recursion
-    def dft_recursive(self, starting_vertex):
-        pass
+    # This should be done using recursion.
+    def dft_recursive(self, starting_vertex, visited=[]):
+        visited.append(starting_vertex)
+        
+        for child_vertex in self.vertices[starting_vertex]:
+            if child_vertex not in visited:
+                self.dft_recursive(child_vertex, visited)
+
+        return visited
 
 
     # Breadth-First Search: Return a list containing the shortest path 
@@ -180,7 +187,7 @@ if __name__ == '__main__':
     #     1, 2, 3, 5, 4, 7, 6
     #     1, 2, 4, 7, 6, 3, 5
     #     1, 2, 4, 6, 3, 5, 7
-    graph.dft_recursive(1)
+    print("DFT_R", graph.dft_recursive(1))
 
     
     # Valid BFS path:
