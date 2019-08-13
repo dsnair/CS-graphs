@@ -23,9 +23,30 @@ class Graph:
             print("Either vertex {} or vertex {} does not exist".format(from_vertex, to_vertex))
         
      
-    # Print each vertex in breadth-first order beginning from starting_vertex
+    # Breadth-First Traversal:
+    # 1. From starting_vertex, visit the adjacent unvisited vertex. 
+    # Mark it as visited. Display it. Insert it in a queue.
+    # 2. Once all adjacent vertices are visited, remove the first vertex from the queue.
+    # 3. Repeat Rule 1 and Rule 2 until the queue is empty.
     def bft(self, starting_vertex):
-        pass
+        q = Queue()
+        visited = [starting_vertex]
+        q.enqueue(starting_vertex)
+
+        while q.size() > 0:
+            for vertex in self.vertices[q.queue[0]]:
+                if vertex in visited:
+                    q.dequeue()
+                else:
+                    visited.append(vertex)
+                    q.enqueue(vertex)
+
+        return visited
+
+
+
+
+
 
     # Print each vertex in depth-first order beginning from starting_vertex
     def dft(self, starting_vertex):
@@ -75,15 +96,6 @@ if __name__ == '__main__':
     print(graph.vertices)
 
     
-    # Valid DFT paths:
-    #     1, 2, 3, 5, 4, 6, 7
-    #     1, 2, 3, 5, 4, 7, 6
-    #     1, 2, 4, 7, 6, 3, 5
-    #     1, 2, 4, 6, 3, 5, 7
-    
-    graph.dft(1)
-
-    
     # Valid BFT paths:
     #     1, 2, 3, 4, 5, 6, 7
     #     1, 2, 3, 4, 5, 7, 6
@@ -98,7 +110,16 @@ if __name__ == '__main__':
     #     1, 2, 4, 3, 7, 6, 5
     #     1, 2, 4, 3, 7, 5, 6
     
-    graph.bft(1)
+    print(graph.bft(1))
+
+
+    # Valid DFT paths:
+    #     1, 2, 3, 5, 4, 6, 7
+    #     1, 2, 3, 5, 4, 7, 6
+    #     1, 2, 4, 7, 6, 3, 5
+    #     1, 2, 4, 6, 3, 5, 7
+    
+    graph.dft(1)
 
     
     # Valid DFT recursive paths:
