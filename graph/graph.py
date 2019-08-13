@@ -69,10 +69,35 @@ class Graph:
     def dft_recursive(self, starting_vertex):
         pass
 
-    # Return a list containing the shortest path from starting_vertex to destination_vertex 
-    # in breath-first order
+
+    # Breadth-First Search: Return a list containing the shortest path 
+    # from starting_vertex to destination_vertex in breath-first order
+    # The difference between BFS and BFT is that BFS stops when destination_vertex is visited,
+    # whereas, BFT keeps going until all vertices have been visited.
     def bfs(self, starting_vertex, destination_vertex):
-        pass
+        q = Queue()
+        visited = []
+        q.enqueue([starting_vertex])
+
+        while q.size():
+            path = q.dequeue()
+            print("Path", path)
+            vertex = path[-1]
+
+            if vertex not in visited:
+                if vertex == destination_vertex:
+                    return path
+                
+                visited.append(vertex)
+
+                for next_vertex in self.vertices[vertex]:
+                    new_path = list(path)
+                    new_path.append(next_vertex) 
+                    q.enqueue(new_path)
+        
+        return None
+
+        return visited
 
     # Return a list containing a path from starting_vertex to destination_vertex 
     # in depth-first order
@@ -143,7 +168,7 @@ if __name__ == '__main__':
     # Valid BFS path:
     #     [1, 2, 4, 6]
     
-    print(graph.bfs(1, 6))
+    print("BFS", graph.bfs(1, 6))
 
     
     # Valid DFS paths:
