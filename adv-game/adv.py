@@ -24,28 +24,22 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-initial_room = 0
-visited = {initial_room: ''}
+visited = {}
 
 def walk():
-    # while len(visited) < len(roomGraph):
-    current_path = ''
-
+    # while len(visited) != len(roomGraph):
     while len(visited) < 3:
-
-        print(player.currentRoom.getExits())
         for direction in player.currentRoom.getExits():
-            # print(player.currentRoom.getRoomInDirection(direction).id, visited)
-            # if player.currentRoom.getRoomInDirection(direction).id not in visited.keys():
-            player.travel(direction)
-            current_path += direction
 
             if player.currentRoom.id not in visited.keys(): 
-                visited[player.currentRoom.id] = current_path
-            else:
-                player.travel(initial_room)
-            break
+                visited[player.currentRoom.id] = direction
+                player.travel(direction)
 
+            if player.currentRoom.id in visited.keys():
+                visited[player.currentRoom.id] = visited[player.currentRoom.id] + direction
+                player.travel(direction)
+
+            break
 
     return visited
 
