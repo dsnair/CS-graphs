@@ -24,16 +24,34 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-def dft(start_room, visited=[]):
-    visited.append(start_room)
-    
-    for adj_room in roomGraph[start_room][1].values():
-        if adj_room not in visited:
-            dft(adj_room, visited)
+visited = []
+path = []
 
-    return visited
+def walk():
 
-print(dft(player.currentRoom.id))
+    while len(visited) < len(roomGraph):
+        directions = player.currentRoom.getExits()
+        print(directions)
+
+        for direction in directions:
+            print(player.currentRoom.id, direction)
+
+            if player.currentRoom.id not in visited: 
+                visited.append(player.currentRoom.id)
+                path.append(direction)
+                player.travel(direction)
+
+            if player.currentRoom.id in visited:
+                visited.append(player.currentRoom.id)
+                path.append(direction)
+                player.travel(direction)
+                visited.append(player.currentRoom.id)
+
+            break
+
+    return (visited, path)
+
+print(walk())
 
 
 
