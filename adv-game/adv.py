@@ -24,37 +24,40 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-visited = []
+visited = {}
 path = []
+cross = {
+    'n': 's',
+    's': 'n',
+    'w': 'e',
+    'e': 'w'
+}
 
 def walk():
-
     while len(visited) < len(roomGraph):
-        directions = player.currentRoom.getExits()
-        print(directions)
+        # at current room, all its exits are '?'/unexplored
+        room = player.currentRoom.id
+        visited[room] = {direc: '?' for direc in player.currentRoom.getExits()}
+        exits = [direc for direc in visited[room].keys() if visited[room][direc] == '?']
 
-        for direction in directions:
-            print(player.currentRoom.id, direction)
+        # start exploration
+        if len(exits):
+            direc = exits[0]
+            player.travel(direc)
+            path.append(direc)
+            visited[room][direc] = player.currentRoom.id
 
-            if player.currentRoom.id not in visited: 
-                visited.append(player.currentRoom.id)
-                path.append(direction)
-                player.travel(direction)
-
-            if player.currentRoom.id in visited:
-                visited.append(player.currentRoom.id)
-                path.append(direction)
-                player.travel(direction)
-                visited.append(player.currentRoom.id)
-
-            break
+            # do DFT to get to dead end
+            if player.currentRoom.id not in visited.keys():
+                visited[player.currentRoom.id] = {direc: '?' for direc in player.currentRoom.getExits()}
+                visited[player.currentRoom.id][cross[direc]] = room
+            # do BFT to get out of dead end
+            else:
+                break
 
     return (visited, path)
 
 print(walk())
-
-
-
 
 
 # Play Game in CLI
