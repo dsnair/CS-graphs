@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from queue import Queue
 
 # Load world
 world = World()
@@ -33,31 +34,64 @@ cross = {
     'e': 'w'
 }
 
-def walk():
+
+def main():
     while len(visited) < len(roomGraph):
-        # at current room, all its exits are '?'/unexplored
+        # at current room, mark all its exits as '?'/unexplored
         room = player.currentRoom.id
         visited[room] = {direc: '?' for direc in player.currentRoom.getExits()}
         exits = [direc for direc in visited[room].keys() if visited[room][direc] == '?']
 
-        # start exploration
+        # start exploring
         if len(exits):
             direc = exits[0]
-            player.travel(direc)
+            player.travel(direc)  # walk into 1st room
             path.append(direc)
             visited[room][direc] = player.currentRoom.id
 
-            # do DFT to get to dead end
+            # walk into a dead end
             if player.currentRoom.id not in visited.keys():
                 visited[player.currentRoom.id] = {direc: '?' for direc in player.currentRoom.getExits()}
                 visited[player.currentRoom.id][cross[direc]] = room
-            # do BFT to get out of dead end
+            # do BFT to get out of that dead end
             else:
                 break
-
+    
     return (visited, path)
 
-print(walk())
+# print(main())
+main()
+
+def bft(start):
+    q = Queue()
+    q.enqueue(start)
+    bft_visited = [start]
+    bft_path = []
+
+    while q.size():
+        exits = roomGraph[q.queue[0]][1]
+
+        for room in exits.values():
+
+            if room not in bft_visited:
+                bft_visited.append(room)
+
+                for k, v in exits.items():
+                    if v == room:
+                        bft_path.append(k)
+
+                q.enqueue(room)
+                print(room, visited.keys())
+        
+        q.dequeue()                    
+
+        if room not in visited.keys():
+            break
+        
+
+    return (bft_visited, bft_path)
+
+print(bft(2))
 
 
 # Play Game in CLI
