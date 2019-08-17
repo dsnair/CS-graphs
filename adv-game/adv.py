@@ -35,12 +35,42 @@ cross = {
 }
 
 
+def bft(start):
+    q = Queue()
+    q.enqueue(start)
+    bft_visited = [start]
+    bft_path = []
+
+    while q.size():
+        exits = roomGraph[q.queue[0]][1]
+
+        for direc, room in exits.items():
+
+            if room not in bft_visited:
+                bft_visited.append(room)
+                bft_path.append((room, direc))
+                q.enqueue(room)
+        
+        q.dequeue()                    
+
+        if room not in visited.keys():
+            break
+
+    return bft_path
+
+
 def main():
-    while len(visited) < len(roomGraph):
+    while len(visited) < 3:
         # at current room, mark all its exits as '?'/unexplored
         room = player.currentRoom.id
-        visited[room] = {direc: '?' for direc in player.currentRoom.getExits()}
-        exits = [direc for direc in visited[room].keys() if visited[room][direc] == '?']
+        exits = []
+
+        if room not in visited:
+            visited[room] = {direc: '?' for direc in player.currentRoom.getExits()}
+
+        for direc in visited[room].keys():
+            if visited[room][direc] == '?':
+                exits.append(direc)
 
         # start exploring
         if len(exits):
@@ -53,14 +83,15 @@ def main():
             if player.currentRoom.id not in visited.keys():
                 visited[player.currentRoom.id] = {direc: '?' for direc in player.currentRoom.getExits()}
                 visited[player.currentRoom.id][cross[direc]] = room
+
             # do BFT to get out of that dead end
             else:
                 break
-    
+
     return (visited, path)
 
-# print(main())
-main()
+print(main())
+
 
 def bft(start):
     q = Queue()
@@ -71,38 +102,21 @@ def bft(start):
     while q.size():
         exits = roomGraph[q.queue[0]][1]
 
-        for room in exits.values():
+        for direc, room in exits.items():
 
             if room not in bft_visited:
                 bft_visited.append(room)
-
-                for k, v in exits.items():
-                    if v == room:
-                        bft_path.append(k)
-
+                bft_path.append((room, direc))
                 q.enqueue(room)
-                print(room, visited.keys())
         
         q.dequeue()                    
 
         if room not in visited.keys():
             break
-        
 
-    return (bft_visited, bft_path)
+    return bft_path
 
 print(bft(2))
-
-
-# Play Game in CLI
-# player.currentRoom.printRoomDescription(player)
-
-# while True:
-#     cmds = input("-> ").lower().split(" ")
-#     if cmds[0] in ["n", "s", "e", "w"]:
-#         player.travel(cmds[0], True)
-#     else:
-#         print("I did not understand that command.")
 
 
 # TRAVERSAL TEST
