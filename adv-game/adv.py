@@ -64,7 +64,7 @@ def bft(start):
 
 
 def main():
-    while len(visited) < 3:
+    while len(visited) < 4:
         # at current room, mark all its exits as '?'/unexplored
         room = player.currentRoom.id
         exits = []
@@ -89,42 +89,16 @@ def main():
                 visited[player.currentRoom.id][cross[direc]] = room
 
             # do BFT to get out of that dead end
-            else:
+            if player.currentRoom.id in visited.keys():
                 bft_path = bft(player.currentRoom.id)
-                break
+                
+                for bft_room in bft_path:
+                    player.travel(bft_room[1])
+                    path.append(bft_room[1])
 
     return (visited, path)
 
 print(main())
-
-
-def bft(start):
-    q = Queue()
-    q.enqueue(start)
-    bft_visited = [start]
-    bft_path = []
-
-    while q.size():
-        exits = roomGraph[q.queue[0]][1]
-        # find unexplored rooms
-        new_exits = '?' in visited[q.queue[0]].values()
-
-        for direc, room in exits.items():
-            if new_exits:
-                if room not in bft_visited and room not in visited.keys():
-                    bft_visited.append(room)
-                    bft_path.append((q.queue[0], direc, room))
-                    break
-            else:
-                if room not in bft_visited:
-                    bft_visited.append(room)
-                    bft_path.append((q.queue[0], direc, room))
-                    q.enqueue(room)
-        
-        q.dequeue()                    
-
-    return bft_path
-print(bft(2))
 
 
 # TRAVERSAL TEST
