@@ -70,54 +70,55 @@ def dft(start, dft_visited=[]):
     if start not in visited.keys():
         visited[start] = {direc: '?' for direc in player.currentRoom.getExits()}
     
-    print("dft", start, visited)
-
     new_exits = '?' in visited[start].values()
 
     # go into 1st unexplored room
-    if new_exits:
-        direc = player.currentRoom.getExits()[0]
+    if new_exits:        
+        for d, room in visited[start].items():
+            if room == '?':
+                direc = d
+        
+
         player.travel(direc)
         dft_visited.append(player.currentRoom.id)
         dft_path.append((start, direc, player.currentRoom.id))
         visited[start][direc] = player.currentRoom.id
+        print('travel dft', player.currentRoom.id, direc, visited)
 
         # walk into a dead end
         if player.currentRoom.id not in visited.keys():
             visited[player.currentRoom.id] = {direc: '?' for direc in player.currentRoom.getExits()}
             visited[player.currentRoom.id][cross[direc]] = start
-        
+            player.travel(direc)
+            dft_path.append((dft_visited[-1], direc, player.currentRoom.id))
+            print('travel dft if', player.currentRoom.id, direc, visited)
+
         dft(player.currentRoom.id, dft_visited)
 
     return dft_path
 
-print(dft(0))
-
 
 def main():
-    while len(visited) < len(roomGraph):
-        start = player.currentRoom.id
-        new_exits = '?' in visited[start].values()
+    while len(visited) < 4:
+        dft_path = dft(player.currentRoom.id)
+        print("dft", dft_path)
 
-        # do DFT to walk into a dead end
-        if new_exits:
-            dft_path = dft(player.currentRoom.id)
+        for dft_room in dft_path:
+            path.append(dft_room[1])   
 
-            for dft_room in dft_path:
-                player.travel(dft_room[1])
-                path.append(dft_room[1])
-        # do BFT to get out of that dead end
-        else:
-            bft_path = bft(player.currentRoom.id)
-            # print("bft", bft_path)
+        bft_path = bft(player.currentRoom.id)
+        print("bft", bft_path)
 
-            for bft_room in bft_path:
-                player.travel(bft_room[1])
-                path.append(bft_room[1])
+        for bft_room in bft_path:
+            path.append(bft_room[1]) 
+            player.travel(bft_room[1])
+            print('travel bft', bft_room[1])
+
+        print("room", player.currentRoom.id)      
 
     return (visited, path)
 
-# print(main())
+print(main())
 
 
 # TRAVERSAL TEST
